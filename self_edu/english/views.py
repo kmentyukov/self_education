@@ -13,3 +13,7 @@ class WordView(ModelViewSet):
     queryset = NewWord.objects.all()
     serializer_class = WordSerializer
 
+
+def words_app(request):
+    return render(request, 'main_app.html')
+
