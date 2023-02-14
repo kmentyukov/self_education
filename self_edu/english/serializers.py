@@ -1,9 +1,9 @@
 from rest_framework.serializers import ModelSerializer
 
-from english.models import NewWord
+from english.models import Word
 
 
 class WordSerializer(ModelSerializer):
     class Meta:
-        model = NewWord
-        fields = ['new_en_word', 'word_translation']
+        model = Word
+        fields = ['en_word', 'ru_word']
