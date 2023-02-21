@@ -16,4 +16,3 @@ class WordView(ModelViewSet):
 
 def words_app(request):
     return render(request, 'main_app.html')
-

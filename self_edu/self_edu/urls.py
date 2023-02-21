@@ -21,7 +21,7 @@ from english.views import index_page, WordView, words_app
 
 router = SimpleRouter()
 
-router.register('api/words', WordView)
+router.register(r'words', WordView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
