@@ -4,7 +4,8 @@ from django.db import models
 
 class Word(models.Model):
     en_word = models.CharField(max_length=50)
-    ru_word = models.CharField(max_length=50)
+    ru_word = models.CharField(max_length=50, blank=True)
+    ru_word_optional = models.CharField(max_length=50, blank=True)
     show_num = models.IntegerField(default=0)
     already_learn = models.BooleanField()
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
