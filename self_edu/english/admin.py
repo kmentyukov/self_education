@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Word
+from django.contrib.admin import ModelAdmin
+
+from english.models import Word
 
 
-admin.site.register(Word)
+@admin.register(Word)
+class WordAdmin(ModelAdmin):
+    pass
