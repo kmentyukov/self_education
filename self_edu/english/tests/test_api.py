@@ -24,9 +24,6 @@ class WordsApiTestCase(APITestCase):
         url = reverse('word-list')
         response = self.client.get(url, data={'en_word': 'check'})
         serializer_data = WordSerializer([self.word_2, self.word_3], many=True).data
-        print(serializer_data)
-        print('*' * 10)
-        print(response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(serializer_data, response.data)
 

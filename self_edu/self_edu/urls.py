@@ -13,11 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from english.views import index_page, WordView, words_app
+from english.views import index_page, WordView, words_app, auth
 
 router = SimpleRouter()
 
@@ -26,7 +27,9 @@ router.register(r'words', WordView)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index_page),
-    path('words_page/', words_app)
+    path('words_page/', words_app),
+    url('', include('social_django.urls', namespace='social')),
+    path('auth/', auth)
 ]
 
 urlpatterns += router.urls
