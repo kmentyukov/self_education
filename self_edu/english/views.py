@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 from english.models import Word
+from english.permissions import IsOwnerOrStaffOrReadOnly
 from english.serializers import WordSerializer
 
 
@@ -16,10 +16,14 @@ class WordView(ModelViewSet):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrStaffOrReadOnly]
     filterset_fields = ['en_word']
     search_fields = ['en_word', 'ru_word']
     ordering_fields = ['en_word', 'already_learn']
+
+    def perform_create(self, serializer):
+        serializer.validated_data['user'] = self.request.user
+        serializer.save()
 
 
 def auth(request):
