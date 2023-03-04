@@ -2,14 +2,13 @@ from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
-
 from english.models import Word
 from english.permissions import IsOwnerOrStaffOrReadOnly
 from english.serializers import WordSerializer
 
 
 def index_page(request):
-    return render(request, 'index.html', {'words': Word.objects.all()})
+    return render(request, 'super_index.html', {'words': Word.objects.all()})
 
 
 class WordView(ModelViewSet):

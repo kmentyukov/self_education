@@ -1,13 +1,13 @@
 new Vue({
-    el: '#words_app',
-    data: {
+    el: '#words_app',                   # к этому элементу подключается view
+    data: {                             # словарик с данными из запроса, пока пустой
     words: []
     },
-    created: function () {
-        const vm = this;
-        axios.get('/api/words/')
-        .then(function (response) {
-        vm.words = response.data
+    created: function () {              # функция выполнится при рендере страницы
+        const vm = this;                # экземпляр класса
+        axios.get('/api/words/')        # отправляем запрос
+        .then(function (response) {     # и после выполняем функцию
+        vm.words = response.data        # получаем ответ от сервера и кладем его в переменную
         })
     }
 }
