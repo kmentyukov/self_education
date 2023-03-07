@@ -48,8 +48,8 @@ class WordsApiTestCase(APITestCase):
             'ru_word': 'кальмар'
         }
         self.client.force_login(self.user)
-        response = self.client.post(url,  data=json.dumps(data),
-                                   content_type='application/json')
+        response = self.client.post(url, data=json.dumps(data),
+                                    content_type='application/json')
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
         self.assertEqual(4, Word.objects.all().count())
         self.assertEqual(self.user, Word.objects.last().user)
@@ -61,7 +61,7 @@ class WordsApiTestCase(APITestCase):
             'ru_word': 'проверка'
         }
         self.client.force_login(self.user)
-        response = self.client.put(url,  data=json.dumps(data),
+        response = self.client.put(url, data=json.dumps(data),
                                    content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.word_1.refresh_from_db()
@@ -75,7 +75,7 @@ class WordsApiTestCase(APITestCase):
             'ru_word': 'проверка'
         }
         self.client.force_login(self.user2)
-        response = self.client.put(url,  data=json.dumps(data),
+        response = self.client.put(url, data=json.dumps(data),
                                    content_type='application/json')
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
         self.assertEqual({'detail': ErrorDetail(string='You do not have permission to perform this action.',
@@ -91,7 +91,7 @@ class WordsApiTestCase(APITestCase):
             'ru_word': 'проверка'
         }
         self.client.force_login(self.user2)
-        response = self.client.put(url,  data=json.dumps(data),
+        response = self.client.put(url, data=json.dumps(data),
                                    content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.word_1.refresh_from_db()
@@ -106,4 +106,3 @@ class WordsApiTestCase(APITestCase):
         self.assertEqual(2, Word.objects.all().count())
         serializer_data = WordSerializer([self.word_2, self.word_3], many=True).data
         self.assertEqual(serializer_data, self.client.get(reverse('word-list')).data)
-

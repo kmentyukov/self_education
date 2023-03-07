@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from english.views import index_page, WordView, words_app, auth
+from english.views import index_page, WordView, words_app, auth, pageNotFound, registration, add_word, word_game
 
 router = SimpleRouter()
 
@@ -27,8 +27,11 @@ router.register(r'words', WordView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index_page),
-    path('words_page/', words_app),
+    path('', index_page, name='home'),
+    path('registration/', registration, name='registration'),
+    path('add_word/', add_word, name='add_word'),
+    path('words_list/', words_app, name='word_list'),
+    path('word_game/', word_game, name='word_game'),
     url('', include('social_django.urls', namespace='social')),
     path('auth/', auth),
     ]
@@ -36,7 +39,9 @@ urlpatterns = [
 urlpatterns += router.urls
 
 if settings.DEBUG:
-    import debug_toolbar
     urlpatterns = [
         path('__debug__/', include('debug_toolbar.urls')),
     ] + urlpatterns
+
+
+handler404 = pageNotFound
