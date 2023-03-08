@@ -19,17 +19,18 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from english.views import index_page, WordView, words_app, auth, pageNotFound, registration, add_word, word_game
+from english.views import WordView, words_app, auth, pageNotFound, word_game, \
+    EngHomeView, EngAddWord, RegisterUser
 
 router = SimpleRouter()
 
 router.register(r'words', WordView)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', index_page, name='home'),
-    path('registration/', registration, name='registration'),
-    path('add_word/', add_word, name='add_word'),
+    path('admin/', admin.site.urls, name='admin'),
+    path('', EngHomeView.as_view(), name='home'),
+    path('registration/', RegisterUser.as_view(), name='registration'),
+    path('add_word/', EngAddWord.as_view(), name='add_word'),
     path('words_list/', words_app, name='word_list'),
     path('word_game/', word_game, name='word_game'),
     url('', include('social_django.urls', namespace='social')),

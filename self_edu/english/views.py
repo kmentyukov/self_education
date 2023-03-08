@@ -1,35 +1,48 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseNotFound, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
-from english.forms import AddWordForm
+from english.forms import AddWordForm, RegisterUserForm
 from english.models import Word
 from english.permissions import IsOwnerOrStaffOrReadOnly
 from english.serializers import WordSerializer
 
 
-def index_page(request):
-    context = {'title': 'Self-Education project',
-               'words': Word.objects.all()
-               }
-    return render(request, 'english/index.html', context=context)
+class EngHomeView(TemplateView):
+    template_name = 'english/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Self-Education project'
+        return context
 
 
-def registration(request):
-    return HttpResponse("Регистрация")
+class RegisterUser(CreateView):
+    form_class = RegisterUserForm
+    template_name = 'english/registration.html'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Registration of a new user'
+        return context
 
 
-def add_word(request):
-    if request.method == 'POST':
-        form = AddWordForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('add_word')
-    else:
-        form = AddWordForm()
-    return render(request, 'english/add_word.html', {'form': form, 'title': 'Addition of a new word'})
+class EngAddWord(LoginRequiredMixin, CreateView):
+    form_class = AddWordForm
+    template_name = 'english/add_word.html'
+    success_url = reverse_lazy('add_word')
+    login_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Addition of a new word'
+        return context
 
 
 def words_app(request):
