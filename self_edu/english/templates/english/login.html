@@ -1,0 +1,30 @@
+{% extends 'english/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container my-3">
+    <h2>{{ title }}</h2>
+    <div>{{ form.non_field_errors }}</div>
+</div>
+
+<div class="container my-3 d-flex justify-content-start">
+    <form method="post">
+        {% csrf_token %}
+
+        {% for f in form %}
+        <div class="mb-3">
+            <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
+            {{ f }}
+            <div>{{ f.errors }}</div>
+        </div>
+        {% endfor %}
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </div>
+        <div class="d-flex my-3 justify-content-md-end">
+            <a href="{% url 'registration' %}" type="button" class="btn btn-outline-dark">Registration</a>
+        </div>
+    </form>
+
+</div>
+{% endblock content %}

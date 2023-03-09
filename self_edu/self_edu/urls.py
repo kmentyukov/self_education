@@ -20,7 +20,7 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from english.views import WordView, words_app, auth, pageNotFound, word_game, \
-    EngHomeView, EngAddWord, RegisterUser
+    EngHomeView, EngAddWord, RegisterUser, LoginUser, logout_user
 
 router = SimpleRouter()
 
@@ -30,11 +30,14 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', EngHomeView.as_view(), name='home'),
     path('registration/', RegisterUser.as_view(), name='registration'),
+    path('login/', LoginUser.as_view(), name='login'),
+    path('logout/', logout_user, name='logout'),
     path('add_word/', EngAddWord.as_view(), name='add_word'),
     path('words_list/', words_app, name='word_list'),
     path('word_game/', word_game, name='word_game'),
     url('', include('social_django.urls', namespace='social')),
     path('auth/', auth),
+    path('captcha/', include('captcha.urls')),
     ]
 
 urlpatterns += router.urls

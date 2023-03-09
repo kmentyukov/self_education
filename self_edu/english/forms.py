@@ -1,11 +1,16 @@
 from string import ascii_letters
 
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from captcha.fields import CaptchaField, CaptchaTextInput
 
 from .models import Word
+
+
+class CustomCaptchaTextInput(CaptchaTextInput):
+    template_name = 'english/captcha_field.html'
 
 
 class RegisterUserForm(UserCreationForm):
@@ -13,10 +18,16 @@ class RegisterUserForm(UserCreationForm):
     email = forms.CharField(label='E-mail', widget=forms.TextInput(attrs={'class': 'form-control'}), required=False)
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    captcha = CaptchaField(widget=CustomCaptchaTextInput)
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2')
+
+
+class LoginUserForm(AuthenticationForm):
+    username = forms.CharField(label='Login', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 
 class AddWordForm(forms.ModelForm):

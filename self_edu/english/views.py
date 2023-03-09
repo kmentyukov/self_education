@@ -1,13 +1,15 @@
+from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponseNotFound, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
-from english.forms import AddWordForm, RegisterUserForm
+from english.forms import AddWordForm, RegisterUserForm, LoginUserForm
 from english.models import Word
 from english.permissions import IsOwnerOrStaffOrReadOnly
 from english.serializers import WordSerializer
@@ -31,6 +33,29 @@ class RegisterUser(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Registration of a new user'
         return context
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('home')
+
+
+class LoginUser(LoginView):
+    form_class = LoginUserForm
+    template_name = 'english/login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Login'
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('home')
 
 
 class EngAddWord(LoginRequiredMixin, CreateView):
@@ -59,7 +84,7 @@ class WordView(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     permission_classes = [IsOwnerOrStaffOrReadOnly]
     filterset_fields = ['en_word']
-    search_fields = ['en_word', 'ru_word']
+    search_fields = ['en_word', 'ru_word', 'ru_word_optional']
     ordering_fields = ['en_word', 'already_learn']
 
     def perform_create(self, serializer):

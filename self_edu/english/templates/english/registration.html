@@ -29,7 +29,14 @@
             {{ form.password2 }}
             <div>{{ form.password2.errors }}</div>
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <div class="mb-3">
+            <label for="{{ form.captcha.id_for_label }}" class="form-label">{{ form.captcha.label }}</label>
+            {{ form.captcha }}
+            <div>{{ form.captcha.errors }}</div>
+        </div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
     </form>
 </form>
 
