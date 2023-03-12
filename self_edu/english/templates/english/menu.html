@@ -20,9 +20,9 @@
                     </li>
                 </ul>
                 <div class="d-lg-flex">
-                    <span class="navbar-text">Привет, {{ request.user.username }}! </span>
+                    <span class="navbar-text">Привет, {{ request.user.username }}!</span>
                     {% if request.user.is_superuser %}
-                        <a href="{% url 'home' %}" type="button" class="btn btn-light me-md-2">Admin panel</a>
+                        <a href="{% url 'admin:index' %}" type="button" class="btn btn-light ms-md-2">Admin panel</a>
                     {% endif %}
                     <a href="{% url 'logout' %}" type="button" class="btn btn-outline-light ms-md-2">Logout</a>
                 </div>

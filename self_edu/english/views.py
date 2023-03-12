@@ -69,6 +69,16 @@ class EngAddWord(LoginRequiredMixin, CreateView):
         context['title'] = 'Addition of a new word'
         return context
 
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        print(instance)
+        instance.save()
+        form.save_m2m()
+        # Apparently you can only add M2M relationships saves after first
+        # saving
+        instance.user.add(self.request.user)
+        return super().form_valid(form)
+
 
 def words_app(request):
     return render(request, 'english/word_list.html', {'title': 'Word list'})
