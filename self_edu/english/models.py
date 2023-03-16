@@ -22,8 +22,8 @@ class Word(models.Model):
 
 
 class UserWord(models.Model):
-    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
     word = models.ForeignKey(Word, null=False, blank=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
     show_num = models.IntegerField(verbose_name='Number of shows', default=0)
     already_learn = models.BooleanField(verbose_name='Learned', default=False)
 
