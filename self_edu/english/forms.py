@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from captcha.fields import CaptchaField, CaptchaTextInput
 
-from .models import Word
+from .models import Word, UserWord
 
 
 class CustomCaptchaTextInput(CaptchaTextInput):
@@ -39,6 +39,16 @@ class AddWordForm(forms.ModelForm):
             'ru_word': forms.TextInput(attrs={'class': 'form-control'}),
             'ru_word_optional': forms.TextInput(attrs={'class': 'form-control'})
         }
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if Word.objects.filter(en_word=cleaned_data['en_word']).exists():
+            if UserWord.objects.filter(
+                Q(word=Word.objects.get(en_word=cleaned_data['en_word']).pk) &
+                Q(user=self.user)
+            ).exists():
+
+
 
     def clean_en_word(self):
         en_word = self.cleaned_data['en_word']

@@ -28,9 +28,22 @@ class UserWord(models.Model):
     already_learn = models.BooleanField(verbose_name='Learned', default=False)
 
     class Meta:
+        unique_together = ['word', 'user']
         verbose_name = 'Английское слово'
         verbose_name_plural = 'Английские слова'
 
     def __str__(self):
         return self.word
 
+'''
+    def save(self, *args, **kwargs):
+        # Only save if the object is new, updating won't do anything
+        if self.pk is None:
+            user_word_count = UserWord.objects.filter(
+                Q(word=self.word) &
+                Q(user=self.user)
+            ).count()
+            if user_word_count > 0:
+                raise WordNotUnique('This word has already been added');
+            super(UserWord, self).save(*args, **kwargs)
+'''

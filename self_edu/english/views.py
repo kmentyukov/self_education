@@ -71,7 +71,7 @@ class EngAddWord(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
-        print(instance)
+        print(instance.en_word, instance.ru_word)
         instance.save()
         form.save_m2m()
         # Apparently you can only add M2M relationships saves after first
