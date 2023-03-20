@@ -1,16 +1,18 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
 from django_filters.rest_framework import DjangoFilterBackend
+from psycopg2 import IntegrityError
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
 from english.forms import AddWordForm, RegisterUserForm, LoginUserForm
-from english.models import Word
+from english.models import Word, UserWord
 from english.permissions import IsOwnerOrStaffOrReadOnly
 from english.serializers import WordSerializer
 
@@ -69,14 +71,29 @@ class EngAddWord(LoginRequiredMixin, CreateView):
         context['title'] = 'Addition of a new word'
         return context
 
+    def get_form_kwargs(self):
+        # Passing the user ID to the form
+        kwargs = super(EngAddWord, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_valid(self, form):
-        instance = form.save(commit=False)
-        print(instance.en_word, instance.ru_word)
-        instance.save()
-        form.save_m2m()
-        # Apparently you can only add M2M relationships saves after first
-        # saving
-        instance.users.add(self.request.user)
+        cleaned_data = form.cleaned_data
+        # print(instance.en_word, instance.ru_word)
+        if not Word.objects.filter(en_word=cleaned_data['en_word']).exists():
+            instance = form.save(commit=False)
+            instance.save()
+            form.save_m2m()
+            # Apparently you can only add M2M relationships saves after first saving
+            instance.users.add(self.request.user)
+        else:
+            UserWord.objects.create(word=Word.objects.get(en_word=cleaned_data['en_word']),
+                                    user=User.objects.get(username=self.request.user)
+                                    )
+            # try:
+            #     instance.save()
+            # except IntegrityError:
+            #     return super().form_valid(form)
         return super().form_valid(form)
 
 

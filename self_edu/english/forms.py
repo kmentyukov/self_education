@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from captcha.fields import CaptchaField, CaptchaTextInput
+from django.db.models import Q
 
 from .models import Word, UserWord
 
@@ -40,15 +41,18 @@ class AddWordForm(forms.ModelForm):
             'ru_word_optional': forms.TextInput(attrs={'class': 'form-control'})
         }
 
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(AddWordForm, self).__init__(*args, **kwargs)
+
     def clean(self):
         cleaned_data = self.cleaned_data
         if Word.objects.filter(en_word=cleaned_data['en_word']).exists():
             if UserWord.objects.filter(
                 Q(word=Word.objects.get(en_word=cleaned_data['en_word']).pk) &
-                Q(user=self.user)
+                Q(user=User.objects.get(username=self.user).pk)
             ).exists():
-
-
+                raise forms.ValidationError("This word has already been added")
 
     def clean_en_word(self):
         en_word = self.cleaned_data['en_word']
