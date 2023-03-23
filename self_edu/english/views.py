@@ -79,7 +79,6 @@ class EngAddWord(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         cleaned_data = form.cleaned_data
-        # print(instance.en_word, instance.ru_word)
         if not Word.objects.filter(en_word=cleaned_data['en_word']).exists():
             instance = form.save(commit=False)
             instance.save()
@@ -90,11 +89,7 @@ class EngAddWord(LoginRequiredMixin, CreateView):
             UserWord.objects.create(word=Word.objects.get(en_word=cleaned_data['en_word']),
                                     user=User.objects.get(username=self.request.user)
                                     )
-            # try:
-            #     instance.save()
-            # except IntegrityError:
-            #     return super().form_valid(form)
-        return super().form_valid(form)
+        return redirect('add_word')
 
 
 def words_app(request):
