@@ -37,8 +37,8 @@
           <th scope="col">Additional russian translation</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="word in words" data-bs-toggle="modal" data-bs-target="#editWord">
+      <tbody v-for="word in words">
+        <tr data-bs-toggle="modal" data-bs-target="#editWord{{ word.id }}">
           <td>{{ word.en_word }}</td>
           <td>{{ word.ru_word }}</td>
           <td>{{ word.ru_word_optional }}</td>
@@ -51,7 +51,7 @@
 {% endverbatim %}
 
 <!-- Modal -->
-<div class="modal fade" id="editWord" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editWord{{ word.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

@@ -5,7 +5,7 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, DeleteView
 from django_filters.rest_framework import DjangoFilterBackend
 from psycopg2 import IntegrityError
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -112,6 +112,15 @@ class WordView(ModelViewSet):
     def perform_create(self, serializer):
         serializer.validated_data['user'] = self.request.user
         serializer.save()
+
+    def get_queryset(self):
+        queryset = self.queryset
+        query_set = queryset.filter(users=self.request.user)
+        return query_set
+
+
+class EngDelWord(LoginRequiredMixin, DeleteView):
+    success_url = reverse_lazy('word_list')
 
 
 def auth(request):
