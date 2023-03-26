@@ -15,6 +15,7 @@
 {%  include 'english/menu.html' %}
 <div class="container my-3">
     <h2>{{ title }}</h2>
+    <!-- Add Search field later
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
             <form class="d-flex" role="search">
@@ -23,6 +24,7 @@
             </form>
         </div>
     </nav>
+    -->
 </div>
 
 
@@ -38,7 +40,7 @@
         </tr>
       </thead>
       <tbody v-for="word in words">
-        <tr data-bs-toggle="modal" data-bs-target="#editWord{{ word.id }}">
+        <tr data-bs-toggle="modal" data-bs-target="#editWord">
           <td>{{ word.en_word }}</td>
           <td>{{ word.ru_word }}</td>
           <td>{{ word.ru_word_optional }}</td>
@@ -51,7 +53,7 @@
 {% endverbatim %}
 
 <!-- Modal -->
-<div class="modal fade" id="editWord{{ word.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editWord" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
