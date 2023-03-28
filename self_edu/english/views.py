@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -5,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, DeleteView
+from django.views.generic import TemplateView, CreateView, DeleteView, UpdateView
 from django_filters.rest_framework import DjangoFilterBackend
 from psycopg2 import IntegrityError
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -117,6 +118,16 @@ class WordView(ModelViewSet):
         queryset = self.queryset
         query_set = queryset.filter(users=self.request.user)
         return query_set
+
+
+class EngEditWord(LoginRequiredMixin, UpdateView):
+    form_class = AddWordForm
+    template_name = 'english/add_word.html'
+    success_url = reverse_lazy('word_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, "The task was updated successfully.")
+        return super(EngEditWord, self).form_valid(form)
 
 
 class EngDelWord(LoginRequiredMixin, DeleteView):

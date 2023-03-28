@@ -37,13 +37,15 @@
           <th scope="col">English word</th>
           <th scope="col">Russian translation</th>
           <th scope="col">Additional russian translation</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody v-for="word in words">
-        <tr data-bs-toggle="modal" data-bs-target="#editWord">
+        <tr> <!-- data-bs-toggle="modal" data-bs-target="#editWord" -->
           <td>{{ word.en_word }}</td>
           <td>{{ word.ru_word }}</td>
           <td>{{ word.ru_word_optional }}</td>
+          <td><a href="{% url 'edit_word' word.id %}" type="button" class="btn btn-outline-light">Edit</a></td>
         </tr>
 
       </tbody>
@@ -52,7 +54,7 @@
 
 {% endverbatim %}
 
-<!-- Modal -->
+<!-- Modal
 <div class="modal fade" id="editWord" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -70,6 +72,7 @@
     </div>
   </div>
 </div>
+ -->
 
 {%  include 'english/footer.html' %}
 <script src="{% static 'english/js/app.js' %}"></script>
