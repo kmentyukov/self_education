@@ -101,7 +101,7 @@ def word_game(request):
     return HttpResponse("Игра в слова")
 
 
-class WordView(ModelViewSet):
+class WordViewSet(ModelViewSet):
     queryset = Word.objects.all()
     serializer_class = WordSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -126,7 +126,7 @@ class EngEditWord(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('word_list')
 
     def form_valid(self, form):
-        messages.success(self.request, "The task was updated successfully.")
+        messages.success(self.request, "The word was updated successfully.")
         return super(EngEditWord, self).form_valid(form)
 
 

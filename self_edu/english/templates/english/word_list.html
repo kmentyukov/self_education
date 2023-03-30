@@ -27,7 +27,6 @@
     -->
 </div>
 
-
 {% verbatim %}
 
 <div class="container" id="words_app">
@@ -45,7 +44,7 @@
           <td>{{ word.en_word }}</td>
           <td>{{ word.ru_word }}</td>
           <td>{{ word.ru_word_optional }}</td>
-          <td><a href="{% url 'edit_word' word.id %}" type="button" class="btn btn-outline-light">Edit</a></td>
+          <td><a href="{% url 'edit_word' pk=word.pk %}" type="button" class="btn btn-outline-light">Edit</a></td>
         </tr>
 
       </tbody>

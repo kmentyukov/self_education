@@ -19,12 +19,12 @@ from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 
-from english.views import WordView, words_app, auth, pageNotFound, word_game, \
-    EngHomeView, EngAddWord, RegisterUser, LoginUser, logout_user, EngEditWord
+from english.views import words_app, auth, pageNotFound, word_game, \
+    EngHomeView, EngAddWord, RegisterUser, LoginUser, logout_user, EngEditWord, WordViewSet
 
 router = SimpleRouter()
 
-router.register(r'words', WordView)
+router.register(r'words', WordViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
