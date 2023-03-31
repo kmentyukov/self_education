@@ -6,9 +6,8 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseNotFound, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, DeleteView, UpdateView
+from django.views.generic import TemplateView, CreateView, DeleteView, UpdateView, ListView
 from django_filters.rest_framework import DjangoFilterBackend
-from psycopg2 import IntegrityError
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
@@ -93,8 +92,39 @@ class EngAddWord(LoginRequiredMixin, CreateView):
         return redirect('add_word')
 
 
-def words_app(request):
-    return render(request, 'english/word_list.html', {'title': 'Word list'})
+class EngWordList(ListView):
+    model = Word
+    # template_name = 'english/word_list.html'
+    context_object_name = 'words'
+    # login_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Word List'
+        return context
+
+
+class EngEditWord(LoginRequiredMixin, UpdateView):
+    model = Word
+    form_class = AddWordForm
+    template_name = 'english/add_word.html'
+    success_url = reverse_lazy('word_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, "The word was updated successfully.")
+        return super(EngEditWord, self).form_valid(form)
+
+
+class EngDelWord(LoginRequiredMixin, DeleteView):
+    success_url = reverse_lazy('word_list')
+
+
+def auth(request):
+    return render(request, 'english/oauth.html', {'title': 'Authorization page'})
+
+
+def pageNotFound(request, exception):
+    return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
 def word_game(request):
@@ -120,23 +150,6 @@ class WordViewSet(ModelViewSet):
         return query_set
 
 
-class EngEditWord(LoginRequiredMixin, UpdateView):
-    form_class = AddWordForm
-    template_name = 'english/add_word.html'
-    success_url = reverse_lazy('word_list')
+# def words_app(request):
+#     return render(request, 'english/word_list.html', {'title': 'Word list'})
 
-    def form_valid(self, form):
-        messages.success(self.request, "The word was updated successfully.")
-        return super(EngEditWord, self).form_valid(form)
-
-
-class EngDelWord(LoginRequiredMixin, DeleteView):
-    success_url = reverse_lazy('word_list')
-
-
-def auth(request):
-    return render(request, 'english/oauth.html', {'title': 'Authorization page'})
-
-
-def pageNotFound(request, exception):
-    return HttpResponseNotFound('<h1>Страница не найдена</h1>')
