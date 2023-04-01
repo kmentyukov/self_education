@@ -94,9 +94,9 @@ class EngAddWord(LoginRequiredMixin, CreateView):
 
 class EngWordList(ListView):
     model = Word
-    # template_name = 'english/word_list.html'
+    template_name = 'english/word_list.html'
     context_object_name = 'words'
-    # login_url = reverse_lazy('home')
+    login_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -110,9 +110,20 @@ class EngEditWord(LoginRequiredMixin, UpdateView):
     template_name = 'english/add_word.html'
     success_url = reverse_lazy('word_list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edit word'
+        return context
+
     def form_valid(self, form):
         messages.success(self.request, "The word was updated successfully.")
         return super(EngEditWord, self).form_valid(form)
+
+    def get_form_kwargs(self):
+        # Passing the user ID to the form
+        kwargs = super(EngEditWord, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 
 class EngDelWord(LoginRequiredMixin, DeleteView):
