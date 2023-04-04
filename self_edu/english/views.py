@@ -11,8 +11,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
 
-from english.forms import AddWordForm, RegisterUserForm, LoginUserForm
-from english.models import Word, UserWord
+from english.forms import AddWordForm, RegisterUserForm, LoginUserForm, EditWordForm
+from english.models import Word
 from english.permissions import IsOwnerOrStaffOrReadOnly
 from english.serializers import WordSerializer
 
@@ -78,25 +78,17 @@ class EngAddWord(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        cleaned_data = form.cleaned_data
-        if not Word.objects.filter(en_word=cleaned_data['en_word']).exists():
-            instance = form.save(commit=False)
-            instance.save()
-            form.save_m2m()
-            # Apparently you can only add M2M relationships saves after first saving
-            instance.users.add(self.request.user)
-        else:
-            UserWord.objects.create(word=Word.objects.get(en_word=cleaned_data['en_word']),
-                                    user=User.objects.get(username=self.request.user)
-                                    )
-        return redirect('add_word')
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class EngWordList(ListView):
-    model = Word
     template_name = 'english/word_list.html'
     context_object_name = 'words'
     login_url = reverse_lazy('home')
+
+    def get_queryset(self):
+        return Word.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -106,7 +98,7 @@ class EngWordList(ListView):
 
 class EngEditWord(LoginRequiredMixin, UpdateView):
     model = Word
-    form_class = AddWordForm
+    form_class = EditWordForm
     template_name = 'english/add_word.html'
     success_url = reverse_lazy('word_list')
 
@@ -118,12 +110,6 @@ class EngEditWord(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, "The word was updated successfully.")
         return super(EngEditWord, self).form_valid(form)
-
-    def get_form_kwargs(self):
-        # Passing the user ID to the form
-        kwargs = super(EngEditWord, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-        return kwargs
 
 
 class EngDelWord(LoginRequiredMixin, DeleteView):
