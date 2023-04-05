@@ -113,6 +113,7 @@ class EngEditWord(LoginRequiredMixin, UpdateView):
 
 
 class EngDelWord(LoginRequiredMixin, DeleteView):
+    model = Word
     success_url = reverse_lazy('word_list')
 
 

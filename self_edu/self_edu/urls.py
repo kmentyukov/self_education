@@ -14,35 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url, include
+from django.conf.urls import include
 from django.contrib import admin
 from django.urls import path
-from rest_framework.routers import SimpleRouter
 
-from english.views import auth, pageNotFound, word_game, \
-    EngHomeView, EngAddWord, RegisterUser, LoginUser, logout_user, EngEditWord, WordViewSet, EngWordList
-
-router = SimpleRouter()
-
-router.register(r'words', WordViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
-    path('', EngHomeView.as_view(), name='home'),
-    path('registration/', RegisterUser.as_view(), name='registration'),
-    path('login/', LoginUser.as_view(), name='login'),
-    path('logout/', logout_user, name='logout'),
-    path('add_word/', EngAddWord.as_view(), name='add_word'),
-    path('edit_word/<int:pk>/', EngEditWord.as_view(), name='edit_word'),
-    path('words_list/', EngWordList.as_view(), name='word_list'),
-    # path('words_list/', words_app, name='word_list'),
-    path('word_game/', word_game, name='word_game'),
-    url('', include('social_django.urls', namespace='social')),
-    path('auth/', auth),
-    path('captcha/', include('captcha.urls')),
+    path('', include('english.urls')),
     ]
 
-urlpatterns += router.urls
 
 if settings.DEBUG:
     urlpatterns = [
@@ -50,4 +31,4 @@ if settings.DEBUG:
     ] + urlpatterns
 
 
-handler404 = pageNotFound
+
