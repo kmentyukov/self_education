@@ -82,7 +82,7 @@ class EngAddWord(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class EngWordList(ListView):
+class EngWordList(LoginRequiredMixin, ListView):
     template_name = 'english/word_list.html'
     context_object_name = 'words'
     login_url = reverse_lazy('home')
