@@ -11,37 +11,49 @@ ____
 Я использовал [эту инструкцию](https://winitpro.ru/index.php/2019/10/25/ustanovka-nastrojka-postgresql-v-windows/)
 
 Скопируйте проект на свой компьютер:
-
-`git clone https://github.com/kmentyukov/self_education.git`
-
+```
+git clone https://github.com/kmentyukov/self_education.git
+```
 Cоздайте и активируйте виртуальное окружение для этого проекта:
-
-`python3 -m venv env`<br>
-`source env/bin/activate`
-
+```
+python3 -m venv env
+```
+```
+source env/bin/activate
+```
 Установите зависимости из файла requirements.txt:
-
-`python3 -m pip install --upgrade pip`<br>
-`pip install -r requirements.txt`
+```
+python3 -m pip install --upgrade pip
+```
+```
+pip install -r requirements.txt
+```
 
 Перейдите в директорию проекта и переименуйте файл .env.example в .env.dev и заполните его своими данными.
 
 Далее мы должны перенести начальную схему базы данных для нашей базы данных PostgreSQL, используя скрипт управления.<br>
 Перейдите в директорию self_edu:
-
-`cd self_edu`
+```
+cd self_edu
+```
 
 Выполните:
 
-`.\manage.py migrate`
+```
+.\manage.py migrate
+```
 
 И создайте администратора проекта с помощью следующей команды:
 
-`.\manage.py createsuperuser`
+```
+.\manage.py createsuperuser
+```
 
 Запустите проект в режиме отладки:
 
-`.\manage.py runserver`
+```
+.\manage.py runserver
+```
 
 #### В проекте использованы технологии:
 - Python
