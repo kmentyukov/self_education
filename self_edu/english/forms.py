@@ -34,9 +34,9 @@ class AddWordForm(WordFormMixin, forms.ModelForm):
         model = Word
         fields = ['en_word', 'ru_word', 'ru_word_optional']
         widgets = {
-            'en_word': forms.TextInput(attrs={'class': 'form-control'}),
-            'ru_word': forms.TextInput(attrs={'class': 'form-control'}),
-            'ru_word_optional': forms.TextInput(attrs={'class': 'form-control'})
+            'en_word': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'ru_word': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'ru_word_optional': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         }
 
     def __init__(self, user, *args, **kwargs):
@@ -58,7 +58,7 @@ class EditWordForm(WordFormMixin, forms.ModelForm):
         model = Word
         fields = ['en_word', 'ru_word', 'ru_word_optional']
         widgets = {
-            'en_word': forms.TextInput(attrs={'class': 'form-control'}),
-            'ru_word': forms.TextInput(attrs={'class': 'form-control'}),
-            'ru_word_optional': forms.TextInput(attrs={'class': 'form-control'})
+            'en_word': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'ru_word': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'}),
+            'ru_word_optional': forms.TextInput(attrs={'class': 'form-control', 'autocomplete': 'off'})
         }

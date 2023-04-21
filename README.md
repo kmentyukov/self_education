@@ -1,6 +1,6 @@
 # self_education
 Created to help me learn English<br>
-Django, PostgreSQL, Boostrap<br>
+Python, Django, Linux, PostgreSQL, Gunicorn, Nginx<br>
 Приложение в работе: [menkir.ru](http://menkir.ru)
 ____
 ### Описание
